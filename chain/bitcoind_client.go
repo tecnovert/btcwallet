@@ -1102,7 +1102,6 @@ func (c *BitcoindClient) rescan(start chainhash.Hash) error {
 // any matching transactions, sending notifications along the way.
 func (c *BitcoindClient) filterBlock(block *wire.MsgBlock, height int32,
 	notify bool) ([]*wtxmgr.TxRecord, error) {
-
 	// If this block happened before the client's birthday, then we'll skip
 	// it entirely.
 	if block.Header.Timestamp.Before(c.birthday) {

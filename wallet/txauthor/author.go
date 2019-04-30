@@ -119,7 +119,8 @@ func NewUnsignedTransaction(outputs []*wire.TxOut, relayFeePerKb btcutil.Amount,
 		}
 
 		unsignedTransaction := &wire.MsgTx{
-			Version:  wire.TxVersion,
+			//Version:  wire.TxVersion, // TODO
+			Version:  wire.ParticlTxVersion,
 			TxIn:     inputs,
 			TxOut:    outputs,
 			LockTime: 0,
@@ -132,14 +133,23 @@ func NewUnsignedTransaction(outputs []*wire.TxOut, relayFeePerKb btcutil.Amount,
 			if err != nil {
 				return nil, err
 			}
+			/* Particl TODO: Branch
 			if len(changeScript) > txsizes.P2WPKHPkScriptSize {
 				return nil, errors.New("fee estimation requires change " +
 					"scripts no larger than P2WPKH output scripts")
 			}
+			*/
 			change := wire.NewTxOut(int64(changeAmount), changeScript)
+
 			l := len(outputs)
 			unsignedTransaction.TxOut = append(outputs[:l:l], change)
 			changeIndex = l
+		}
+
+		if unsignedTransaction.Version == wire.ParticlTxVersion {
+			for i := range unsignedTransaction.TxOut {
+				unsignedTransaction.TxOut[i].Version = wire.OutputTypeStandard
+			}
 		}
 
 		return &AuthoredTx{
@@ -205,6 +215,13 @@ func AddAllInputScripts(tx *wire.MsgTx, prevPkScripts [][]byte, inputValues []bt
 		pkScript := prevPkScripts[i]
 
 		switch {
+		case tx.Version == wire.ParticlTxVersion:
+			err := spendWitnessKeyHash(inputs[i], pkScript,
+				int64(inputValues[i]), chainParams, secrets,
+				tx, hashCache, i)
+			if err != nil {
+				return err
+			}
 		// If this is a p2sh output, who's script hash pre-image is a
 		// witness program, then we'll need to use a modified signing
 		// function which generates both the sigScript, and the witness
