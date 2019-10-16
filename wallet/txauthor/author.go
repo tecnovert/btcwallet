@@ -125,7 +125,8 @@ func NewUnsignedTransaction(outputs []*wire.TxOut, relayFeePerKb btcutil.Amount,
 		}
 
 		unsignedTransaction := &wire.MsgTx{
-			Version:  wire.TxVersion,
+			Version:  wire.ParticlTxVersion, // Particl TODO: Pass coin type
+			//Version:  wire.TxVersion,
 			TxIn:     inputs,
 			TxOut:    outputs,
 			LockTime: 0,

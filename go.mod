@@ -32,4 +32,7 @@ replace github.com/btcsuite/btcwallet/wallet/txrules => ./wallet/txrules
 
 replace github.com/btcsuite/btcwallet/wallet/txsizes => ./wallet/txsizes
 
+replace github.com/btcsuite/btcd => ../btcd
+replace github.com/btcsuite/btcutil => ../btcutil
+
 go 1.13
