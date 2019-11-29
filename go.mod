@@ -1,4 +1,4 @@
-module github.com/btcsuite/btcwallet
+module github.com/tecnovert/btcwallet
 
 require (
 	github.com/btcsuite/btcd v0.20.1-beta
@@ -32,7 +32,7 @@ replace github.com/btcsuite/btcwallet/wallet/txrules => ./wallet/txrules
 
 replace github.com/btcsuite/btcwallet/wallet/txsizes => ./wallet/txsizes
 
-replace github.com/btcsuite/btcd => ../btcd
-replace github.com/btcsuite/btcutil => ../btcutil
+replace github.com/btcsuite/btcd => github.com/tecnovert/btcd particl_v2
+replace github.com/btcsuite/btcutil => github.com/tecnovert/btcutil particl_v2
 
 go 1.13
